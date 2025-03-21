@@ -1,16 +1,18 @@
-from pyspark.sql import SparkSession
+import pandas as pd  # Import Pandas
 
-# Initialize Spark session
-spark = SparkSession.builder.appName("RetailSalesForecasting").getOrCreate()
+# Load the dataset
+file_path = "C:\\Users\\user\\Desktop\\Surya Project\\Major Project\\monthwise_synthetic_retail_sales_data.csv"  # Update file path
+df = pd.read_csv(file_path)
 
-# Correct file path format
-file_path = r"C:\Users\user\Desktop\Surya Project\Major Project\Scripts\monthwise_synthetic_retail_sales_data.csv"
+# Convert 'Date' column to datetime format
+df["Date"] = pd.to_datetime(df["Date"], format="%d-%m-%Y")
 
-# Debugging: Check if file exists
-import os
-print("File Exists:", os.path.exists(file_path))
+# Convert 'Discount' from percentage string to float
+df["Discount"] = df["Discount"].str.replace("%", "").astype(float)
 
-# Load CSV
-df = spark.read.csv(file_path, header=True, inferSchema=True)
+# Display updated data types and missing values
+print("Updated Data Types:\n", df.dtypes)
+print("\nMissing Values:\n", df.isnull().sum())
 
-df.show(650)
+# Save the cleaned data (optional)
+df.to_csv("C:\\Users\\user\\Desktop\\Surya Project\\Major Project\\cleaned_data.csv", index=False)

@@ -1,12 +1,8 @@
-from pyspark.sql import SparkSession
+import pandas as pd
 
-# Initialize Spark session
-spark = SparkSession.builder.appName("RetailSalesForecasting").getOrCreate()
-
-# Load CSV file
+# Load the dataset
 file_path = "monthwise_synthetic_retail_sales_data.csv"
-df = spark.read.csv(file_path, header=True, inferSchema=True)
+df = pd.read_csv(file_path)
 
-# Show schema and first few rows
-df.printSchema()
-df.show(5)
+# Display basic information and first few rows
+df.info(), df.head()
